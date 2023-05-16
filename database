@@ -1,0 +1,312 @@
+#DDL,
+CREATE TABLE student
+(
+student_id INT,
+student_name VARCHAR(30),
+student_age INT,
+student_address VARCHAR(25),
+student_phone_no VARCHAR(20)
+);
+#---DQL---
+Select * from student;
+#---DML---
+INSERT INTO student (student_id,student_name,student_age,student_address,student_phone_no)
+VALUES (2,'anu',22,'N','9972630725'),(3,'advi',11,'N','9972630725'),(4,'prani',16,'N','9972630725');
+---DML UPDATE---
+UPDATE student SET student_age = 4, student_phone_no = '9972630724'
+WHERE student_name='anu';
+
+--ALTER----
+ALTER TABLE
+student
+ADD PRIMARY KEY (student_id);
+ALTER TABLE
+student
+RENAME COLUMN
+student_phone_no TO student_phone_number;
+--TRUNCATE---
+TRUNCATE TABLE studentInfo;
+--ALTER TRUNCATE
+ALTER TABLE
+student
+DROP COLUMN
+Email_id;
+
+---DROP TABLE
+DROP TABLE studentInfo;
+
+--CREATED TABLE FOR RANK
+CREATE TABLE Grades (
+Grade VARCHAR(1)
+);
+
+--INSERTED VALUES
+INSERT INTO Grades(Grade)
+VALUES
+('A'),('A'),('A'),
+('B'),('B'),
+('C'),
+('D');
+
+Select * from Grades;
+Select * from Grades;
+SELECT
+Grade,
+RANK () OVER (
+ORDER BY Grade
+) grade_rank
+FROM
+Grades;
+
+CREATE TABLE transaction (
+transaction_id serial PRIMARY KEY,
+transaction_data VARCHAR (256) NOT NULL
+);
+CREATE TABLE invoices (
+invoice_id serial PRIMARY KEY,
+transaction_id INT NOT NULL,
+invoice_data VARCHAR (256) NOT NULL,
+invoice_amount INT NOT NULL,
+FOREIGN KEY (transaction_id) REFERENCES transaction (transaction_id)
+);
+
+INSERT INTO transaction (transaction_data)
+VALUES
+('Purchase of Mobile'),
+('Purchase of PC'),
+('Purchase of Headphone'),
+('Purchase of Mouse'),
+('Purchase of Cable');
+
+INSERT INTO invoices (invoice_data, transaction_id,invoice_amount)
+VALUES
+('Purchase of Mobile', 1,30500),
+('Purchase of Mobile', 1,30500),
+('Purchase of Mobile', 1,20500),
+('Purchase of PC', 2,15000),
+('Purchase of PC', 2,12000);
+
+select * from transaction;
+select * from invoices;
+
+SELECT
+invoice_id,
+invoice_data,
+invoice_amount,
+RANK () OVER (
+ORDER BY invoice_amount DESC
+) invoice_amount_rank
+FROM
+invoices;
+
+SELECT
+invoice_id,
+invoice_data,
+invoice_amount,
+transaction_data,
+RANK () OVER (
+PARTITION BY i.transaction_id
+ORDER BY invoice_amount DESC
+) invoice_amount_rank
+FROM
+invoices i
+INNER JOIN transaction t
+ON i.transaction_id = t.transaction_id;
+CREATE TABLE person2 (
+  id INTEGER PRIMARY KEY,
+  name VARCHAR(50),
+  birthdate DATE,
+  weight DECIMAL(5,2)
+);
+
+
+select * from invoices;
+
+UPDATE invoices
+SET invoice_amount=2500
+WHERE transaction_id=2;
+
+----JOINS----
+CREATE TABLE customers2 (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  email VARCHAR(100)
+);
+
+
+-- Create the "orders" table
+CREATE TABLE orders2 (
+  id SERIAL PRIMARY KEY,
+  customer_id INTEGER,
+  product VARCHAR(100),
+  quantity INTEGER,
+  FOREIGN KEY (customer_id) REFERENCES customers2(id)
+);
+
+
+INSERT INTO customers2 (name, email)
+VALUES ('John Doe', 'john.doe@example.com'),
+       ('Jane Smith', 'jane.smith@example.com'),
+       ('Mike Johnson', 'mike.johnson@example.com');
+
+INSERT INTO orders2 (customer_id, product, quantity)
+VALUES (1, 'Widget A', 3),
+       (2, 'Widget B', 2),
+       (1, 'Widget C', 5),
+       (3, 'Widget A', 1);
+
+select * from orders2;
+select * from customers2;
+
+----Inner Join:
+---Example: Retrieve the customer name and their ordered products.
+
+SELECT customers2.name, orders2.product
+FROM customers2
+INNER JOIN orders2 ON customers2.id = orders2.customer_id;
+
+------Left Join:
+----Example: Retrieve all customers and their ordered products (if any),
+----including customers without any orders.
+SELECT customers2.name, orders2.product
+FROM customers2
+LEFT JOIN orders2 ON customers2.id = orders2.customer_id;
+
+----Right Join:
+---Example: Retrieve all orders and their corresponding customer names (if any),
+----including orders without any associated customers
+
+SELECT customers2.name, orders2.product
+FROM customers2
+RIGHT JOIN orders2 ON customers2.id = orders2.customer_id;
+
+---Full join
+SELECT customers2.name, orders2.product
+FROM customers2
+FULL OUTER JOIN orders2 ON customers2.id = orders2.customer_id;
+
+---stored procedure
+CREATE TABLE employees2(
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(50),
+  last_name VARCHAR(50),
+  hire_date DATE,
+  salary NUMERIC(10, 2)
+);
+
+----example
+INSERT INTO employees2 (first_name, last_name, hire_date, salary)
+VALUES ('John', 'Doe', '2022-01-01', 5000),
+       ('Jane', 'Smith', '2021-03-15', 4500),
+       ('Mike', 'Johnson', '2023-02-28', 6000);
+
+INSERT INTO employees2 (first_name, last_name, hire_date, salary)
+VALUES ('John', 'Doe', '2022-01-01', 5000),
+       ('Jane', 'Smith', '2021-03-15', 4500),
+       ('Mike', 'Johnson', '2023-02-28', 6000);
+
+
+INSERT INTO customers2 (name, email)
+VALUES ('John Doe', NULL),
+       (NULL, 'jane.smith@example.com'),
+       ('Mike Johnson', 'mike.johnson@example.com');
+
+--CONSTRINTS
+
+create table employees3(cust_id int primary key not null,)
+
+---NOT NULL
+CREATE TABLE Customer3(
+Cust_Id INT PRIMARY KEY NOT NULL,
+Cust_Name TEXT NOT NULL,
+Cust_Address CHAR(50),
+Cust_Age INT NOT NULL,
+Cust_Salary REAL
+);
+
+--EXAMPLE
+-- Inserting values into the table
+INSERT INTO Customer3 (Cust_Id, Cust_Name, Cust_Address, Cust_Age, Cust_Salary)
+VALUES (1, 'Jane Smith', '456 Oak St', 30, 50000.00);
+
+-- Query to retrieve all records from the table
+SELECT *
+FROM Customer3;
+
+
+---CHECK
+CREATE TABLE Customer4(
+Cust_Id INT PRIMARY KEY NOT NULL,
+Cust_Name TEXT NOT NULL,
+Cust_Address CHAR(30),
+Cust_Age INT NOT NULL,
+Cust_Salary REAL check (Cust_Salary>0)
+);
+
+
+---EXAMPLE
+INSERT INTO Customer4 (Cust_Id, Cust_Name, Cust_Address, Cust_Age, Cust_Salary)
+VALUES
+    (1, 'John Doe', '123 Main St', 25, 50000.00),
+    (2, 'Jane Smith', '456 Oak St', 30, 75000.00),
+    (3, 'Bob Johnson', '789 Elm St', 35, 60000.00);
+
+SELECT *
+FROM Customer4
+WHERE Cust_Salary > 60000.00;
+
+---UNIQUE
+CREATE TABLE Customer3(
+Cust_Id INT PRIMARY KEY NOT NULL,
+Cust_Name TEXT NOT NULL,
+Cust_Address CHAR(30),
+Cust_Age INT NOT NULL Unique,
+Cust_Salary REAL default 20000.00
+);
+-- Inserting values into the table
+INSERT INTO Customer3 (Cust_Id, Cust_Name, Cust_Address, Cust_Age)
+VALUES
+    (1, 'John Doe', '123 Main St', 25),
+    (2, 'Jane Smith', '456 Oak St', 30),
+    (3, 'Bob Johnson', '789 Elm St', 35);
+SELECT * FROM Customer3;
+
+--PRIMARY KEY
+CREATE TABLE Employee(
+Emp_Id INT PRIMARY KEY NOT NULL,
+Emp_Name TEXT NOT NULL,
+Emp_Address CHAR(30),
+Emp_Age INT NOT NULL
+);
+--EXAMPLE
+-- Query to retrieve all records from the table
+SELECT *
+FROM Employee;
+
+-- Inserting values into the table
+INSERT INTO Employee (Emp_Id, Emp_Name, Emp_Address, Emp_Age)
+VALUES
+    (1, 'John Doe', '123 Main St', 25),
+    (2, 'Jane Smith', '456 Oak St', 30),
+    (3, 'Bob Johnson', '789 Elm St', 35);
+
+
+---FOREIGN KEY
+CREATE TABLE Employee3(
+Emp_Id INT PRIMARY KEY NOT NULL,
+Emp_Name TEXT NOT NULL,
+Emp_Address CHAR(30),
+Emp_Age INT NOT NULL
+);
+
+---EXAMPLE
+-- Inserting values into the table
+INSERT INTO Employee3 (Emp_Id, Emp_Name, Emp_Address, Emp_Age)
+VALUES
+    (1, 'John Doe', '123 Main St', 25),
+    (2, 'Jane Smith', '456 Oak St', 30),
+    (3, 'Bob Johnson', '789 Elm St', 35);
+
+-- Query to retrieve all records from the table
+SELECT *
+FROM Employee3;
